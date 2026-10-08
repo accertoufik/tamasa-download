@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.toufik.tamasa",
+      "sha256_cert_fingerprints": [
+        "34:2B:C8:6D:23:95:96:0D:B2:84:EF:D5:74:FD:F0:64:04:3A:28:D8:9D:F6:84:FF:34:30:BF:7A:41:07:81:41"
+      ]
+    }
+  }
+]

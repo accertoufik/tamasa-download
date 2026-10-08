@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tamasa</title>
+  <meta name="theme-color" content="#12121A">
+  <link rel="icon" href="/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Bitcount+Ink:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #12121A; --card: #171722; --soft: #242434; --border: rgba(255,255,255,.08);
+      --text: #ECECF2; --muted: #9094AA; --accent: #7A1FD9; --accent-text: #A57BEA;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      min-height: 100vh; background: var(--bg); color: var(--text);
+      font-family: "Open Sans", system-ui, sans-serif; line-height: 1.55;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    body::before {
+      content: ""; position: fixed; inset: auto 0 0 0; height: 40vh; pointer-events: none;
+      background: linear-gradient(to top, rgba(122,31,217,.30), transparent);
+    }
+    main { width: 100%; max-width: 560px; padding: 56px 20px 40px; position: relative; text-align: center; }
+    .logo { width: 96px; height: 96px; border-radius: 24px; display: block; margin: 0 auto 20px; box-shadow: 0 8px 30px rgba(122,31,217,.35); }
+    h1 { font-family: "Bitcount Ink", ui-monospace, monospace; font-weight: 700; letter-spacing: 2px;
+         font-size: clamp(40px, 11vw, 60px); margin: 0 0 6px; }
+    .tag { color: var(--accent-text); margin: 0 0 32px; font-weight: 600; }
+    .download {
+      display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #fff;
+      text-decoration: none; font-weight: 700; font-size: 17px; padding: 15px 28px; border-radius: 999px;
+    }
+    .download:hover { background: #6615B8; }
+    .download[aria-disabled="true"] { background: var(--soft); color: var(--muted); pointer-events: none; }
+    .meta { color: var(--muted); font-size: 13px; margin-top: 12px; }
+    .card {
+      text-align: left; background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 22px 22px 8px; margin-top: 40px;
+    }
+    .card h2 { font-size: 16px; margin: 0 0 14px; }
+    ol { margin: 0; padding: 0; list-style: none; counter-reset: s; }
+    li { counter-increment: s; display: flex; gap: 14px; margin-bottom: 16px; color: var(--text); }
+    li::before {
+      content: counter(s); flex: none; width: 26px; height: 26px; border-radius: 50%;
+      background: var(--soft); color: var(--accent-text); font-weight: 700; font-size: 13px;
+      display: grid; place-items: center; margin-top: 1px;
+    }
+    li small { display: block; color: var(--muted); }
+    footer { color: var(--muted); font-size: 12px; padding: 0 20px 32px; position: relative; text-align: center; }
+  
+    .alt { display: block; margin-top: 18px; color: var(--accent-text); font-weight: 600; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="logo" src="/logo.png" width="96" height="96" alt="Tamasa logo">
+    <h1>TAMASA</h1>
+    <p class="tag" id="msg">Opening the video…</p>
+    <a class="download" id="open" href="#">Open in Tamasa</a>
+    <a class="alt" href="/">Get the app</a>
+  </main>
+  <script>
+    // Share links look like /video/<id>. GitHub Pages serves this page for them (404.html fallback).
+    var m = location.pathname.match(/^\/video\/([0-9a-fA-F-]{36})\/?$/);
+    var msg = document.getElementById("msg");
+    var open = document.getElementById("open");
+    if (!m) {
+      msg.textContent = "Page not found.";
+      open.textContent = "Go to Tamasa";
+      open.href = "/";
+    } else {
+      var id = m[1];
+      var isAndroid = /Android/i.test(navigator.userAgent);
+      // Chrome on Android: open the app if installed, otherwise fall back to the download page.
+      var target = isAndroid
+        ? "intent://video/" + id + "#Intent;scheme=vidoeondemand;package=com.toufik.tamasa;S.browser_fallback_url=" +
+          encodeURIComponent(location.origin + "/") + ";end"
+        : "vidoeondemand://video/" + id;
+      open.href = target;
+      if (isAndroid) {
+        location.replace(target);
+      } else {
+        msg.textContent = "Open this video in the Tamasa app on your Android phone.";
+        open.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
